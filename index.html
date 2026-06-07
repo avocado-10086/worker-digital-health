@@ -1,11 +1,919 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="refresh" content="0; url=ai_safety_platform.html">
-  <title>Redirecting...</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="description" content="AI 산업안전 플랫폼 | AI Industrial Safety Platform | AI工业安全平台">
+<meta name="theme-color" content="#060e1f" id="themeColorMeta">
+<title>AI 산업안전 플랫폼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link id="fontLink" href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#060e1f; --surface:#0d1b35; --surface2:#122040;
+  --accent:#00d4ff; --accent2:#ff6b35; --accent3:#39ff14;
+  --warn:#ffbe0b; --danger:#ff3860;
+  --text:#e8f4fd; --text2:#a9c6dd; --text3:#8aafc8;
+  --border:rgba(0,212,255,0.2); --glow:rgba(0,212,255,0.15);
+  --grid-line:rgba(0,212,255,0.03); --chart-grid:rgba(255,255,255,0.05);
+  --row-hover:rgba(0,212,255,0.03);
+  --font-en:'Rajdhani',sans-serif; --font-kr:'Noto Sans KR',sans-serif;
+  --font-cn:'Noto Sans SC','Noto Sans KR',sans-serif;
+}
+body.theme-light{
+  --bg:#eef4fb; --surface:#ffffff; --surface2:#f1f6fc;
+  --accent:#0077b6; --accent2:#e8590c; --accent3:#2b9348;
+  --warn:#c77800; --danger:#d11149;
+  --text:#0d1b35; --text2:#3d5673; --text3:#5b7290;
+  --border:rgba(0,119,182,0.22); --glow:rgba(0,119,182,0.12);
+  --grid-line:rgba(0,119,182,0.04); --chart-grid:rgba(0,30,60,0.07);
+  --row-hover:rgba(0,119,182,0.05);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--font-kr);min-height:100vh;overflow-x:hidden;transition:background .4s,color .4s}
+body.lang-en{font-family:var(--font-en)}
+body.lang-cn{font-family:var(--font-cn)}
+body.menu-open{overflow:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+header{position:fixed;top:0;left:0;right:0;z-index:1000;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:0 clamp(1rem,4vw,2.5rem);height:64px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:flex;align-items:center;gap:.75rem;text-decoration:none;flex-shrink:0}
+.logo-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),#0066ff);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;color:#fff;font-family:var(--font-en);box-shadow:0 0 20px var(--glow);flex-shrink:0}
+.logo-text{font-family:var(--font-en);font-weight:700;font-size:clamp(.85rem,2.5vw,1.1rem);color:var(--accent);letter-spacing:.05em;line-height:1.2}
+.logo-sub{font-size:.6rem;color:var(--text2);letter-spacing:.08em}
+nav{display:flex;align-items:center;gap:clamp(.5rem,2vw,1.5rem)}
+.nav-link{color:var(--text2);text-decoration:none;font-size:.82rem;letter-spacing:.05em;transition:color .2s;padding:.3rem;white-space:nowrap}
+.nav-link:hover,.nav-link.active,.nav-link[aria-current="page"]{color:var(--accent)}
+.controls{display:flex;align-items:center;gap:.6rem}
+.lang-switcher{display:flex;align-items:center;gap:4px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px;flex-shrink:0}
+.lang-btn{padding:4px 10px;border-radius:16px;border:none;background:none;cursor:pointer;font-size:.72rem;color:var(--text2);transition:all .2s;font-weight:600;white-space:nowrap}
+.lang-btn.active{background:var(--accent);color:#001018}
+.theme-btn,.nav-mobile-btn{background:var(--surface2);border:1px solid var(--border);cursor:pointer;color:var(--text);padding:0;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;font-size:1rem}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-mobile-btn{display:none;border-radius:8px;font-size:1.3rem}
+.status-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:6px clamp(1rem,4vw,2.5rem);display:flex;align-items:center;gap:1rem;font-size:.7rem;color:var(--text2);margin-top:64px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.status-bar::-webkit-scrollbar{display:none}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--accent3);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(57,255,20,.4)}50%{opacity:.7;box-shadow:0 0 0 6px rgba(57,255,20,0)}}
+.status-sep{color:var(--border);flex-shrink:0}
+.disclaimer{max-width:1400px;margin:.75rem auto 0;padding:0 clamp(1rem,4vw,2.5rem);position:relative;z-index:1}
+.disclaimer-inner{background:color-mix(in srgb,var(--warn) 10%,transparent);border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);border-radius:8px;padding:.6rem 1rem;font-size:.72rem;color:var(--text2);display:flex;gap:.5rem;align-items:center;line-height:1.5}
+.disclaimer-inner strong{color:var(--warn)}
+.hero{padding:clamp(2.5rem,6vw,5rem) clamp(1rem,4vw,2.5rem);position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;min-height:calc(100vh - 100px);max-width:1400px;margin:0 auto}
+@media(max-width:768px){.hero{grid-template-columns:1fr;min-height:auto;padding:2rem 1rem}}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:color-mix(in srgb,var(--accent) 10%,transparent);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:20px;padding:5px 14px;font-size:.72rem;color:var(--accent);letter-spacing:.08em;margin-bottom:1.5rem}
+.hero-title{font-family:var(--font-en);font-size:clamp(2rem,5vw,3.8rem);font-weight:700;line-height:1.1;margin-bottom:1rem}
+.hero-title .accent{color:var(--accent)}
+.hero-title .accent2{color:var(--accent2)}
+.hero-desc{font-size:clamp(.85rem,1.8vw,1rem);color:var(--text2);line-height:1.8;margin-bottom:2rem;max-width:520px}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap}
+.btn-primary{padding:12px 28px;border-radius:6px;background:linear-gradient(135deg,var(--accent),#0066ff);color:#001018;font-weight:700;border:none;cursor:pointer;font-size:.9rem;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem;box-shadow:0 0 30px var(--glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 40px var(--glow)}
+.btn-secondary{padding:12px 28px;border-radius:6px;background:transparent;color:var(--accent);font-weight:700;border:1px solid var(--accent);cursor:pointer;font-size:.9rem;transition:all .3s;text-decoration:none;display:inline-flex;align-items:center;gap:.5rem}
+.btn-secondary:hover{background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.hero-monitor{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;box-shadow:0 0 60px var(--glow);position:relative;overflow:hidden}
+.hero-monitor::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 4%,transparent) 0%,transparent 60%);animation:rotate 20s linear infinite}
+@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.monitor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.monitor-title{font-family:var(--font-en);font-size:.75rem;color:var(--accent);letter-spacing:.1em}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:.65rem;color:var(--accent3);font-family:var(--font-en);letter-spacing:.1em}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.2rem}
+.kpi-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1rem;position:relative;overflow:hidden;transition:border-color .3s}
+.kpi-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px}
+.kpi-card.green::after{background:var(--accent3)}.kpi-card.orange::after{background:var(--accent2)}.kpi-card.blue::after{background:var(--accent)}.kpi-card.yellow::after{background:var(--warn)}
+.kpi-label{font-size:.65rem;color:var(--text2);margin-bottom:.4rem;letter-spacing:.05em}
+.kpi-value{font-family:var(--font-en);font-size:1.8rem;font-weight:700;line-height:1}
+.kpi-value.green{color:var(--accent3)}.kpi-value.orange{color:var(--accent2)}.kpi-value.blue{color:var(--accent)}.kpi-value.yellow{color:var(--warn)}
+.kpi-change{font-size:.65rem;color:var(--text2);margin-top:.3rem}
+.kpi-change.up{color:var(--accent3)}.kpi-change.down{color:var(--danger)}
+.mini-chart{height:60px;display:flex;align-items:flex-end;gap:2px;margin-top:1rem}
+.mini-bar{flex:1;border-radius:2px 2px 0 0;background:color-mix(in srgb,var(--accent) 30%,transparent);transition:height .5s ease;min-width:6px}
+.mini-bar.highlight{background:var(--accent)}
+section{padding:clamp(2rem,5vw,4rem) clamp(1rem,4vw,2.5rem);max-width:1400px;margin:0 auto;position:relative;z-index:1}
+.section-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.section-title{font-family:var(--font-en);font-size:clamp(1.2rem,3vw,1.8rem);font-weight:700;color:var(--text)}
+.section-title span{color:var(--accent)}
+.section-sub{font-size:.78rem;color:var(--text2)}
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,var(--accent),transparent);margin-bottom:2rem;opacity:.3}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem}
+.dash-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;transition:all .3s;position:relative;overflow:hidden}
+.dash-card:hover{border-color:var(--accent);box-shadow:0 0 30px var(--glow);transform:translateY(-3px)}
+.dash-card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem}
+.dash-card-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.dash-card-title{font-size:.8rem;color:var(--text2);letter-spacing:.05em}
+.dash-card-value{font-family:var(--font-en);font-size:2.2rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.dash-card-meta{font-size:.72rem;color:var(--text2)}
+.chart-container{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.2rem}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:.5rem}
+.chart-title{font-size:.88rem;font-weight:600;color:var(--text)}
+.chart-legend{display:flex;gap:1rem;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.7rem;color:var(--text2)}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.svg-chart{width:100%;height:220px}
+@media(max-width:480px){.svg-chart{height:160px}}
+.map-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:1.5rem}
+@media(max-width:900px){.map-grid{grid-template-columns:1fr}}
+.korea-map-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;display:flex;flex-direction:column}
+.korea-map-wrap svg{width:100%;height:auto;max-height:440px}
+.kr-region{stroke:var(--bg);stroke-width:1.2;cursor:pointer;transition:opacity .2s,filter .2s}
+.kr-region:hover,.kr-region:focus{opacity:.85;filter:brightness(1.15);outline:none}
+.kr-region.sel{stroke:var(--text);stroke-width:2}
+.map-legend{display:flex;align-items:center;gap:.5rem;margin-top:1rem;font-size:.68rem;color:var(--text2);flex-wrap:wrap}
+.map-legend .scale{display:flex;height:10px;border-radius:5px;overflow:hidden;width:140px}
+.map-legend .scale span{flex:1}
+.region-list{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;align-self:start}
+.region-item{display:flex;align-items:center;justify-content:space-between;padding:.85rem 1.2rem;border-bottom:1px solid var(--border);transition:background .2s;cursor:pointer}
+.region-item:last-child{border-bottom:none}
+.region-item:hover,.region-item.sel{background:var(--surface2)}
+.region-name{font-size:.82rem;color:var(--text);min-width:54px}
+.region-bar-wrap{flex:1;margin:0 1rem;height:5px;background:var(--surface2);border-radius:3px}
+.region-bar{height:100%;border-radius:3px;transition:width 1s ease}
+.region-val{font-family:var(--font-en);font-size:.78rem;font-weight:600;white-space:nowrap}
+.alert-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1rem}
+.alert-card{border-radius:10px;padding:1.2rem;border-left:4px solid;display:flex;gap:1rem;align-items:flex-start;transition:all .3s}
+.alert-card:hover{transform:translateX(4px)}
+.alert-card.critical{background:color-mix(in srgb,var(--danger) 8%,transparent);border-color:var(--danger)}
+.alert-card.warning{background:color-mix(in srgb,var(--warn) 8%,transparent);border-color:var(--warn)}
+.alert-card.info{background:color-mix(in srgb,var(--accent) 8%,transparent);border-color:var(--accent)}
+.alert-card.safe{background:color-mix(in srgb,var(--accent3) 8%,transparent);border-color:var(--accent3)}
+.alert-icon{font-size:1.3rem;flex-shrink:0;margin-top:2px}
+.alert-title{font-size:.85rem;font-weight:600;margin-bottom:.3rem}
+.alert-card.critical .alert-title{color:var(--danger)}.alert-card.warning .alert-title{color:var(--warn)}.alert-card.info .alert-title{color:var(--accent)}.alert-card.safe .alert-title{color:var(--accent3)}
+.alert-desc{font-size:.75rem;color:var(--text2);line-height:1.6}
+.alert-time{font-size:.65rem;color:var(--text3);margin-top:.4rem;font-family:var(--font-en)}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+@media(max-width:700px){.ai-grid{grid-template-columns:1fr}}
+.ai-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+.ai-card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.ai-icon{width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#0066ff);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.ai-card-title{font-size:.85rem;font-weight:600}
+.ai-list-item{display:flex;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid color-mix(in srgb,var(--text) 5%,transparent);font-size:.8rem;color:var(--text2)}
+.ai-list-item:last-child{border-bottom:none}
+.ai-list-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0}
+.ai-score{margin-left:auto;font-family:var(--font-en);font-size:.8rem;font-weight:700}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.table-toolbar{padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:.75rem}
+.search-input{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:7px 12px;color:var(--text);font-size:.8rem;outline:none;width:200px;transition:border-color .2s}
+.search-input:focus{border-color:var(--accent)}
+.search-input::placeholder{color:var(--text3)}
+.table-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:580px}
+thead tr{background:var(--surface2)}
+th{padding:.85rem 1rem;text-align:left;font-size:.72rem;color:var(--text2);letter-spacing:.08em;font-weight:600;white-space:nowrap}
+td{padding:.85rem 1rem;font-size:.8rem;border-bottom:1px solid color-mix(in srgb,var(--text) 5%,transparent);color:var(--text)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--row-hover)}
+.severity-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.68rem;font-weight:600;letter-spacing:.05em}
+.severity-high{background:color-mix(in srgb,var(--danger) 15%,transparent);color:var(--danger)}
+.severity-mid{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}
+.severity-low{background:color-mix(in srgb,var(--accent3) 15%,transparent);color:var(--accent3)}
+.ticker-wrap{background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:8px 0;overflow:hidden}
+.ticker-inner{display:inline-flex;gap:3rem;animation:ticker 40s linear infinite;white-space:nowrap}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{font-size:.72rem;color:var(--text2);display:flex;align-items:center;gap:.5rem}
+.ticker-item .t-icon{color:var(--accent)}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:2.5rem clamp(1rem,4vw,2.5rem);margin-top:3rem;position:relative;z-index:1}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1400px;margin:0 auto}
+@media(max-width:768px){.footer-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.footer-grid{grid-template-columns:1fr}}
+.footer-logo{font-family:var(--font-en);font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:.5rem}
+.footer-desc{font-size:.78rem;color:var(--text2);line-height:1.7;max-width:260px;margin-bottom:1rem}
+.footer-col h4{font-size:.75rem;color:var(--text);letter-spacing:.08em;margin-bottom:.8rem;font-weight:600}
+.footer-col a{display:block;font-size:.75rem;color:var(--text2);text-decoration:none;margin-bottom:.4rem;transition:color .2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{border-top:1px solid var(--border);margin-top:2rem;padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;max-width:1400px;margin-left:auto;margin-right:auto}
+.footer-copy{font-size:.72rem;color:var(--text2)}
+.nav-desktop{display:flex;align-items:center;gap:1.5rem}
+@media(max-width:900px){.nav-desktop{display:none}.nav-mobile-btn{display:flex}}
+.mobile-menu{display:none;position:fixed;top:64px;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--bg) 98%,transparent);z-index:999;flex-direction:column;padding:2rem;gap:1rem}
+.mobile-menu.open{display:flex}
+.mobile-menu .nav-link{font-size:1.1rem;padding:.8rem 0;border-bottom:1px solid var(--border)}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeInUp .6s ease forwards;opacity:0}
+.delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
+.count-up{display:inline-block}
+.tooltip{position:relative}
+.tooltip:hover::after{content:attr(data-tip);position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:var(--surface2);border:1px solid var(--border);padding:5px 10px;border-radius:6px;font-size:.68rem;color:var(--text);white-space:nowrap;z-index:100;pointer-events:none}
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.ring-svg{transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:var(--surface2);stroke-width:8}
+.ring-fill{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:1.5rem;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{padding:.8rem 1.2rem;background:none;border:none;cursor:pointer;color:var(--text2);font-size:.8rem;white-space:nowrap;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--accent);color:#001018;padding:8px 16px;z-index:2000;border-radius:0 0 6px 0;font-size:.8rem;font-weight:600}
+.skip-link:focus{left:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  .ticker-inner{animation:none}
+  .hero-monitor::before{animation:none}
+}
+</style>
 </head>
-<body>
-  <p>Redirecting to <a href="ai_safety_platform.html">AI Safety Platform</a>...</p>
+<body class="lang-kr">
+<a class="skip-link" href="#dashboard" data-i18n="skip">본문으로 건너뛰기</a>
+
+<header>
+  <a class="logo" href="#" aria-label="AI Industrial Safety Platform home">
+    <div class="logo-icon" aria-hidden="true">AI</div>
+    <div>
+      <div class="logo-text" id="logo-text">AI 산업안전 플랫폼</div>
+      <div class="logo-sub">INDUSTRIAL SAFETY PLATFORM</div>
+    </div>
+  </a>
+  <nav class="nav-desktop" aria-label="Primary">
+    <a class="nav-link" href="#dashboard" data-i18n="nav_dashboard" aria-current="page">대시보드</a>
+    <a class="nav-link" href="#analysis" data-i18n="nav_analysis">AI 분석</a>
+    <a class="nav-link" href="#map" data-i18n="nav_map">지역 지도</a>
+    <a class="nav-link" href="#alerts" data-i18n="nav_alerts">위험 경보</a>
+    <a class="nav-link" href="#data" data-i18n="nav_data">데이터</a>
+    <a class="nav-link" href="#report" data-i18n="nav_report">보고서</a>
+  </nav>
+  <div class="controls">
+    <div class="lang-switcher" role="group" aria-label="Language">
+      <button class="lang-btn" data-lang="kr" onclick="setLang('kr')">한국</button>
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="cn" onclick="setLang('cn')">中文</button>
+    </div>
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme" title="라이트/다크 전환">🌙</button>
+    <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Open menu" aria-expanded="false" id="menuBtn">☰</button>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a class="nav-link" href="#dashboard" onclick="toggleMenu()" data-i18n="nav_dashboard">대시보드</a>
+  <a class="nav-link" href="#analysis" onclick="toggleMenu()" data-i18n="nav_analysis">AI 분석</a>
+  <a class="nav-link" href="#map" onclick="toggleMenu()" data-i18n="nav_map">지역 지도</a>
+  <a class="nav-link" href="#alerts" onclick="toggleMenu()" data-i18n="nav_alerts">위험 경보</a>
+  <a class="nav-link" href="#data" onclick="toggleMenu()" data-i18n="nav_data">데이터</a>
+  <a class="nav-link" href="#report" onclick="toggleMenu()" data-i18n="nav_report">보고서</a>
+</div>
+
+<div class="status-bar">
+  <div class="live-dot" aria-hidden="true"></div>
+  <span data-i18n="status_live">실시간 모니터링 중</span>
+  <span class="status-sep" aria-hidden="true">|</span>
+  <span id="status-time"></span>
+  <span class="status-sep" aria-hidden="true">|</span>
+  <span data-i18n="status_sites">모니터링 사업장: <strong style="color:var(--accent)">4,872</strong>곳</span>
+  <span class="status-sep" aria-hidden="true">|</span>
+  <span data-i18n="status_workers">관리 근로자: <strong style="color:var(--accent)">1,243,580</strong>명</span>
+  <span class="status-sep" aria-hidden="true">|</span>
+  <span>🇰🇷 &nbsp;산업안전보건연구원 (OSHRI) &nbsp;|&nbsp; KWCS 2006-2024</span>
+</div>
+
+<div class="disclaimer">
+  <div class="disclaimer-inner">
+    <span aria-hidden="true">ℹ️</span>
+    <span data-i18n="disclaimer"><strong>데모 안내:</strong> 본 화면의 수치는 KWCS·산업안전보건실태조사 등 공개 통계를 바탕으로 한 시연용 예시이며, 실시간 값은 시뮬레이션입니다.</span>
+  </div>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker" aria-hidden="true"></div>
+</div>
+<div class="hero">
+  <div class="hero-left animate-in">
+    <div class="hero-badge"><div class="live-dot" aria-hidden="true"></div><span data-i18n="hero_badge">실시간 AI 산업안전 모니터링 시스템</span></div>
+    <h1 class="hero-title"><span class="accent">AI</span> 산업안전<br><span class="accent2" data-i18n="hero_title2">플랫폼</span></h1>
+    <p class="hero-desc" data-i18n="hero_desc">근로환경조사·산업안전보건실태조사·작업환경실태조사 데이터를 AI로 실시간 분석하여 산업현장의 위험을 예측하고 예방합니다.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="#dashboard"><span aria-hidden="true">📊</span> <span data-i18n="btn_dashboard">대시보드 보기</span></a>
+      <a class="btn-secondary" href="#analysis"><span aria-hidden="true">🤖</span> <span data-i18n="btn_analysis">AI 분석</span></a>
+    </div>
+  </div>
+  <div class="hero-monitor animate-in delay-2">
+    <div class="monitor-header">
+      <span class="monitor-title" data-i18n="monitor_title">LIVE SAFETY MONITOR</span>
+      <div class="live-badge"><div class="live-dot" aria-hidden="true"></div><span>LIVE</span></div>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi-card green"><div class="kpi-label" data-i18n="kpi1">전국 안전지수</div><div class="kpi-value green" id="kpi-safety">87.3</div><div class="kpi-change up">▲ 0.8 <span data-i18n="vs_last">전월 대비</span></div></div>
+      <div class="kpi-card orange"><div class="kpi-label" data-i18n="kpi2">이달 재해발생</div><div class="kpi-value orange" id="kpi-accident">1,247</div><div class="kpi-change down">▼ 3.2% <span data-i18n="vs_last">전월 대비</span></div></div>
+      <div class="kpi-card blue"><div class="kpi-label" data-i18n="kpi3">AI 예측 정확도</div><div class="kpi-value blue" id="kpi-ai">98.4%</div><div class="kpi-change up">▲ 0.3%</div></div>
+      <div class="kpi-card yellow"><div class="kpi-label" data-i18n="kpi4">고위험 경보</div><div class="kpi-value yellow" id="kpi-alert">23</div><div class="kpi-change"><span style="color:var(--danger)">▲ 5 <span data-i18n="new_alert">신규</span></span></div></div>
+    </div>
+    <div class="mini-chart" id="miniChart" role="img" aria-label="최근 12개월 재해발생 추이 막대그래프"></div>
+    <div style="font-size:.65rem;color:var(--text2);margin-top:.5rem;text-align:right" data-i18n="chart_label">최근 12개월 재해발생 추이</div>
+  </div>
+</div>
+
+<main id="main">
+<section id="dashboard">
+  <div class="section-header">
+    <div>
+      <h2 class="section-title"><span aria-hidden="true">📊</span> <span data-i18n="sec_dashboard">실시간 대시보드</span></h2>
+      <div class="section-sub" data-i18n="sec_dashboard_sub">근로환경조사 · 산업안전보건실태조사 · 작업환경실태조사 통합 데이터</div>
+    </div>
+    <div id="last-update" style="font-size:.72rem;color:var(--text2)"></div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="dashboard-grid">
+    <div class="dash-card"><div class="dash-card-header"><div class="dash-card-icon" style="background:color-mix(in srgb,var(--accent) 15%,transparent)" aria-hidden="true">👷</div><div class="dash-card-title" data-i18n="card1_title">조사 참여 근로자</div></div><div class="dash-card-value"><span class="count-up" data-target="1243580">0</span></div><div class="dash-card-meta" data-i18n="card1_meta">1차~10차 KWCS 누적 응답자</div></div>
+    <div class="dash-card"><div class="dash-card-header"><div class="dash-card-icon" style="background:color-mix(in srgb,var(--accent2) 15%,transparent)" aria-hidden="true">🏭</div><div class="dash-card-title" data-i18n="card2_title">모니터링 사업장</div></div><div class="dash-card-value"><span class="count-up" data-target="4872">0</span></div><div class="dash-card-meta" data-i18n="card2_meta">전국 산업안전 관리 사업장</div></div>
+    <div class="dash-card"><div class="dash-card-header"><div class="dash-card-icon" style="background:color-mix(in srgb,var(--accent3) 15%,transparent)" aria-hidden="true">📋</div><div class="dash-card-title" data-i18n="card3_title">변수 분석항목</div></div><div class="dash-card-value"><span class="count-up" data-target="847">0</span></div><div class="dash-card-meta" data-i18n="card3_meta">3개 조사 통합 분석 변수</div></div>
+    <div class="dash-card"><div class="dash-card-header"><div class="dash-card-icon" style="background:color-mix(in srgb,var(--warn) 15%,transparent)" aria-hidden="true">🤖</div><div class="dash-card-title" data-i18n="card4_title">AI 예측 모델</div></div><div class="dash-card-value"><span class="count-up" data-target="12">0</span></div><div class="dash-card-meta" data-i18n="card4_meta">운영 중인 위험 예측 AI 모델</div></div>
+  </div>
+  <div style="margin-top:1.5rem;display:grid;grid-template-columns:3fr 2fr;gap:1.2rem" class="charts-row">
+    <div class="chart-container">
+      <div class="chart-header">
+        <span class="chart-title" data-i18n="chart1_title">연도별 산업재해 발생 추이 (2006–2024)</span>
+        <div class="chart-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div><span data-i18n="legend1">재해자수</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--accent2)"></div><span data-i18n="legend2">사망자수</span></div>
+        </div>
+      </div>
+      <svg class="svg-chart" viewBox="0 0 700 200" preserveAspectRatio="none" role="img" aria-label="2006년부터 2024년까지 재해자수와 사망자수 추이 그래프">
+        <defs>
+          <linearGradient id="gr1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#00d4ff" stop-opacity="0.3"/><stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/></linearGradient>
+          <linearGradient id="gr2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#ff6b35" stop-opacity="0.3"/><stop offset="100%" stop-color="#ff6b35" stop-opacity="0"/></linearGradient>
+        </defs>
+        <line x1="0" y1="40" x2="700" y2="40" stroke="var(--chart-grid)" stroke-width="1"/>
+        <line x1="0" y1="80" x2="700" y2="80" stroke="var(--chart-grid)" stroke-width="1"/>
+        <line x1="0" y1="120" x2="700" y2="120" stroke="var(--chart-grid)" stroke-width="1"/>
+        <line x1="0" y1="160" x2="700" y2="160" stroke="var(--chart-grid)" stroke-width="1"/>
+        <path d="M0,140 L39,130 L78,120 L117,115 L156,110 L195,100 L234,95 L273,88 L312,82 L351,78 L390,74 L429,70 L468,67 L507,64 L546,62 L585,60 L624,58 L663,55 L700,52 L700,200 L0,200 Z" fill="url(#gr1)"/>
+        <path d="M0,140 L39,130 L78,120 L117,115 L156,110 L195,100 L234,95 L273,88 L312,82 L351,78 L390,74 L429,70 L468,67 L507,64 L546,62 L585,60 L624,58 L663,55 L700,52" fill="none" stroke="#00d4ff" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M0,185 L39,183 L78,180 L117,177 L156,175 L195,172 L234,170 L273,167 L312,165 L351,163 L390,161 L429,159 L468,157 L507,155 L546,153 L585,151 L624,149 L663,147 L700,145 L700,200 L0,200 Z" fill="url(#gr2)"/>
+        <path d="M0,185 L39,183 L78,180 L117,177 L156,175 L195,172 L234,170 L273,167 L312,165 L351,163 L390,161 L429,159 L468,157 L507,155 L546,153 L585,151 L624,149 L663,147 L700,145" fill="none" stroke="#ff6b35" stroke-width="2" stroke-linejoin="round" stroke-dasharray="6,3"/>
+        <text x="0" y="198" fill="var(--text3)" font-size="9" font-family="Rajdhani">2006</text>
+        <text x="175" y="198" fill="var(--text3)" font-size="9" font-family="Rajdhani">2012</text>
+        <text x="350" y="198" fill="var(--text3)" font-size="9" font-family="Rajdhani">2018</text>
+        <text x="525" y="198" fill="var(--text3)" font-size="9" font-family="Rajdhani">2022</text>
+        <text x="670" y="198" fill="var(--text3)" font-size="9" font-family="Rajdhani">2024</text>
+      </svg>
+    </div>
+    <div class="chart-container">
+      <div class="chart-header"><span class="chart-title" data-i18n="chart2_title">업종별 위험지수</span></div>
+      <div id="industryBars"></div>
+    </div>
+  </div>
+
+  <div style="margin-top:1.5rem">
+    <div class="tabs" role="tablist">
+      <button class="tab-btn active" onclick="switchTab('kwcs',this)" data-i18n="tab1">근로환경조사 (KWCS)</button>
+      <button class="tab-btn" onclick="switchTab('osh',this)" data-i18n="tab2">산업안전보건실태조사</button>
+      <button class="tab-btn" onclick="switchTab('work',this)" data-i18n="tab3">작업환경실태조사</button>
+    </div>
+    <div id="tab-kwcs" class="tab-panel active">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+        <div class="dash-card" style="border-color:color-mix(in srgb,var(--accent) 30%,transparent)"><div class="dash-card-title" data-i18n="kwcs_rounds">조사 회차</div><div class="dash-card-value" style="font-size:1.6rem">1차 – 6차</div><div class="dash-card-meta">2006, 2010, 2011, 2014, 2017, 2020</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="kwcs_vars">분석 변수</div><div class="dash-card-value" style="font-size:1.6rem">165+</div><div class="dash-card-meta" data-i18n="kwcs_vars_meta">물리적·심리적·인간공학적 위험</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="kwcs_base">근거법령</div><div class="dash-card-value" style="font-size:1rem;margin-top:.5rem">통계법 제33조</div><div class="dash-card-meta">승인통계 제380002호</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="kwcs_intl">국제 연계</div><div class="dash-card-value" style="font-size:1rem;margin-top:.5rem">EWCS / ILO</div><div class="dash-card-meta">Eurofound MOU 체결</div></div>
+      </div>
+    </div>
+    <div id="tab-osh" class="tab-panel">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+        <div class="dash-card" style="border-color:color-mix(in srgb,var(--accent2) 30%,transparent)"><div class="dash-card-title" data-i18n="osh_rounds">최신 조사</div><div class="dash-card-value" style="font-size:1.6rem">9차·10차</div><div class="dash-card-meta" data-i18n="osh_rounds_meta">산업안전보건 실태조사 최신 데이터</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="osh_items">주요 항목</div><div class="dash-card-value" style="font-size:1rem;margin-top:.5rem" data-i18n="osh_items_val">안전관리·보건관리·위험성평가</div><div class="dash-card-meta" data-i18n="osh_items_meta">사업장 안전보건 수준 전반</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="osh_scope">조사 범위</div><div class="dash-card-value" style="font-size:1.6rem">전국</div><div class="dash-card-meta" data-i18n="osh_scope_meta">5인 이상 사업장 표본조사</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="osh_org">주관기관</div><div class="dash-card-value" style="font-size:1rem;margin-top:.5rem">OSHRI / KOSHA</div><div class="dash-card-meta" data-i18n="osh_org_meta">산업안전보건연구원</div></div>
+      </div>
+    </div>
+    <div id="tab-work" class="tab-panel">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem">
+        <div class="dash-card" style="border-color:color-mix(in srgb,var(--accent3) 30%,transparent)"><div class="dash-card-title" data-i18n="work_latest">최신 조사</div><div class="dash-card-value" style="font-size:1.6rem">7차</div><div class="dash-card-meta" data-i18n="work_latest_meta">작업환경 실태조사</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="work_focus">핵심 분야</div><div class="dash-card-value" style="font-size:1rem;margin-top:.5rem" data-i18n="work_focus_val">화학·물리·생물학적 위험</div><div class="dash-card-meta" data-i18n="work_focus_meta">작업환경측정 결과 분석</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="work_sites">측정 사업장</div><div class="dash-card-value" style="font-size:1.6rem">2,847</div><div class="dash-card-meta" data-i18n="work_sites_meta">7차 조사 대상 사업장</div></div>
+        <div class="dash-card"><div class="dash-card-title" data-i18n="work_agents">유해인자</div><div class="dash-card-value" style="font-size:1.6rem">189종</div><div class="dash-card-meta" data-i18n="work_agents_meta">측정·분석 대상 유해인자</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section id="analysis">
+  <div class="section-header">
+    <div><h2 class="section-title"><span aria-hidden="true">🤖</span> <span data-i18n="sec_ai">AI 위험 분석</span></h2><div class="section-sub" data-i18n="sec_ai_sub">머신러닝 기반 실시간 위험 예측 및 패턴 분석</div></div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="ai-grid">
+    <div class="ai-card"><div class="ai-card-header"><div class="ai-icon" aria-hidden="true">⚡</div><div class="ai-card-title" data-i18n="ai1_title">업종별 위험 예측 순위</div></div><div class="ai-list" id="industryRank"></div></div>
+    <div class="ai-card"><div class="ai-card-header"><div class="ai-icon" aria-hidden="true">🎯</div><div class="ai-card-title" data-i18n="ai2_title">주요 위험 요인 분석</div></div><div class="ai-list" id="riskFactors"></div></div>
+    <div class="ai-card" style="grid-column:1/-1"><div class="ai-card-header"><div class="ai-icon" aria-hidden="true">📈</div><div class="ai-card-title" data-i18n="ai3_title">AI 안전지수 분포 (지역별)</div></div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:1rem;margin-top:.5rem" id="regionRings"></div></div>
+  </div>
+</section>
+
+<section id="map">
+  <div class="section-header">
+    <div><h2 class="section-title"><span aria-hidden="true">🗺️</span> <span data-i18n="sec_map">지역별 안전지수 지도</span></h2><div class="section-sub" data-i18n="sec_map_sub">전국 시·도별 AI 안전지수 히트맵 — 클릭하여 상세 확인</div></div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="map-grid">
+    <div class="korea-map-wrap">
+      <svg id="koreaMap" viewBox="0 0 300 380" role="img" aria-label="대한민국 시도별 안전지수 지도">
+        <!-- 단순화한 행정구역 폴리곤 (개략 형태) -->
+        <path class="kr-region" data-region="0" tabindex="0" d="M120,40 L160,35 L175,55 L165,80 L135,82 L118,62 Z"></path>
+        <path class="kr-region" data-region="2" tabindex="0" d="M100,70 L118,62 L135,82 L130,100 L105,98 L92,82 Z"></path>
+        <path class="kr-region" data-region="3" tabindex="0" d="M135,82 L165,80 L185,95 L180,120 L140,122 L130,100 Z"></path>
+        <path class="kr-region" data-region="4" tabindex="0" d="M105,98 L140,122 L135,150 L100,152 L88,125 Z"></path>
+        <path class="kr-region" data-region="6" tabindex="0" d="M180,120 L215,118 L225,150 L200,175 L160,165 L140,122 Z"></path>
+        <path class="kr-region" data-region="1" tabindex="0" d="M175,180 L210,178 L220,205 L195,225 L168,210 Z"></path>
+        <path class="kr-region" data-region="5" tabindex="0" d="M100,160 L160,170 L165,205 L120,235 L92,205 Z"></path>
+      </svg>
+      <div class="map-legend">
+        <span data-i18n="map_low">낮음</span>
+        <div class="scale"><span style="background:var(--danger)"></span><span style="background:var(--accent2)"></span><span style="background:var(--warn)"></span><span style="background:var(--accent3)"></span></div>
+        <span data-i18n="map_high">우수</span>
+      </div>
+    </div>
+    <div class="region-list" id="regionList"></div>
+  </div>
+</section>
+
+<section id="alerts">
+  <div class="section-header">
+    <div><h2 class="section-title"><span aria-hidden="true">🚨</span> <span data-i18n="sec_alerts">위험 경보 현황</span></h2><div class="section-sub" data-i18n="sec_alerts_sub">AI가 실시간으로 감지한 산업현장 위험 상황</div></div>
+    <div style="font-family:var(--font-en);font-size:.72rem;color:var(--text2)" id="alert-count"></div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="alert-grid" id="alertGrid"></div>
+</section>
+
+<section id="data">
+  <div class="section-header">
+    <div><h2 class="section-title"><span aria-hidden="true">📋</span> <span data-i18n="sec_data">조사 데이터 현황</span></h2><div class="section-sub" data-i18n="sec_data_sub">근로환경조사·산업안전보건·작업환경 통합 데이터베이스</div></div>
+  </div>
+  <div class="section-divider"></div>
+  <div class="table-wrap">
+    <div class="table-toolbar">
+      <input class="search-input" id="tableSearch" type="text" placeholder="🔍 검색..." oninput="filterTable()" aria-label="테이블 검색">
+      <div style="font-size:.75rem;color:var(--text2)" id="table-info"></div>
+    </div>
+    <div class="table-scroll">
+      <table id="dataTable">
+        <thead><tr><th data-i18n="th_survey">조사명</th><th data-i18n="th_round">회차</th><th data-i18n="th_year">연도</th><th data-i18n="th_vars">변수수</th><th data-i18n="th_industry">주요 업종</th><th data-i18n="th_risk">위험도</th><th data-i18n="th_status">상태</th></tr></thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="report">
+  <div class="section-header">
+    <div><h2 class="section-title"><span aria-hidden="true">📑</span> <span data-i18n="sec_report">AI 분석 보고서</span></h2><div class="section-sub" data-i18n="sec_report_sub">자동 생성 안전 분석 보고서 및 정책 제언</div></div>
+  </div>
+  <div class="section-divider"></div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.2rem">
+    <div class="dash-card" style="border-color:color-mix(in srgb,var(--accent) 40%,transparent)"><div style="font-size:2rem;margin-bottom:1rem" aria-hidden="true">📊</div><div style="font-weight:600;margin-bottom:.5rem" data-i18n="report1_title">2024년 산업안전 연간 보고서</div><div style="font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:1rem" data-i18n="report1_desc">KWCS 1~6차 통합 분석 및 AI 예측 모델 성과 보고</div><button class="btn-secondary" style="font-size:.75rem;padding:7px 14px;border-radius:4px" data-i18n="btn_download">📥 다운로드</button></div>
+    <div class="dash-card"><div style="font-size:2rem;margin-bottom:1rem" aria-hidden="true">🏭</div><div style="font-weight:600;margin-bottom:.5rem" data-i18n="report2_title">업종별 위험도 평가 보고서</div><div style="font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:1rem" data-i18n="report2_desc">제조·건설·서비스업 등 12개 업종별 AI 위험 분석</div><button class="btn-secondary" style="font-size:.75rem;padding:7px 14px;border-radius:4px" data-i18n="btn_download">📥 다운로드</button></div>
+    <div class="dash-card"><div style="font-size:2rem;margin-bottom:1rem" aria-hidden="true">🌏</div><div style="font-weight:600;margin-bottom:.5rem" data-i18n="report3_title">국제 비교 분석 보고서</div><div style="font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:1rem" data-i18n="report3_desc">EWCS·ILO 데이터 연계 한국 산업안전 국제 비교</div><button class="btn-secondary" style="font-size:.75rem;padding:7px 14px;border-radius:4px" data-i18n="btn_download">📥 다운로드</button></div>
+    <div class="dash-card"><div style="font-size:2rem;margin-bottom:1rem" aria-hidden="true">🤖</div><div style="font-weight:600;margin-bottom:.5rem" data-i18n="report4_title">AI 모델 성능 보고서</div><div style="font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:1rem" data-i18n="report4_desc">위험 예측 모델 정확도·재현율·F1 스코어 상세</div><button class="btn-secondary" style="font-size:.75rem;padding:7px 14px;border-radius:4px" data-i18n="btn_download">📥 다운로드</button></div>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-logo">AI 산업안전 플랫폼</div>
+      <div class="footer-desc" data-i18n="footer_desc">근로환경조사·산업안전보건실태조사·작업환경실태조사 데이터를 AI로 통합 분석하는 국가 산업안전 플랫폼</div>
+      <div style="font-size:.72rem;color:var(--text2)">OSHRI · KOSHA · Eurofound</div>
+    </div>
+    <div class="footer-col"><h4 data-i18n="footer_data">데이터</h4><a href="#" data-i18n="footer_kwcs">근로환경조사 (KWCS)</a><a href="#" data-i18n="footer_osh">산업안전보건실태조사</a><a href="#" data-i18n="footer_work">작업환경실태조사</a><a href="#" data-i18n="footer_intl">국제 데이터 (ILO·EWCS)</a></div>
+    <div class="footer-col"><h4 data-i18n="footer_service">서비스</h4><a href="#" data-i18n="footer_monitor">실시간 모니터링</a><a href="#" data-i18n="footer_predict">AI 위험 예측</a><a href="#" data-i18n="footer_alert">위험 경보 시스템</a><a href="#" data-i18n="footer_report">자동 보고서</a></div>
+    <div class="footer-col"><h4 data-i18n="footer_legal">법적 근거</h4><a href="#">산업안전보건법</a><a href="#">통계법 제33조</a><a href="#">승인통계 제380002호</a><a href="#">ILO 협약</a></div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 AI 산업안전 플랫폼 · OSHRI · KOSHA · All rights reserved</div>
+    <div style="font-size:.72rem;color:var(--text2)" data-i18n="footer_powered">Powered by AI · Real-time Data</div>
+  </div>
+</footer>
+<script>
+const i18n = {
+  kr: {
+    nav_dashboard:'대시보드', nav_analysis:'AI 분석', nav_map:'지역 지도', nav_alerts:'위험 경보', nav_data:'데이터', nav_report:'보고서',
+    skip:'본문으로 건너뛰기',
+    disclaimer:'<strong>데모 안내:</strong> 본 화면의 수치는 KWCS·산업안전보건실태조사 등 공개 통계를 바탕으로 한 시연용 예시이며, 실시간 값은 시뮬레이션입니다.',
+    status_live:'실시간 모니터링 중', status_sites:'모니터링 사업장: <strong style="color:var(--accent)">4,872</strong>곳',
+    status_workers:'관리 근로자: <strong style="color:var(--accent)">1,243,580</strong>명',
+    hero_badge:'실시간 AI 산업안전 모니터링 시스템', hero_title2:'플랫폼',
+    hero_desc:'근로환경조사·산업안전보건실태조사·작업환경실태조사 데이터를 AI로 실시간 분석하여 산업현장의 위험을 예측하고 예방합니다.',
+    btn_dashboard:'대시보드 보기', btn_analysis:'AI 분석',
+    monitor_title:'LIVE SAFETY MONITOR', vs_last:'전월 대비', new_alert:'신규',
+    kpi1:'전국 안전지수', kpi2:'이달 재해발생', kpi3:'AI 예측 정확도', kpi4:'고위험 경보',
+    chart_label:'최근 12개월 재해발생 추이',
+    sec_dashboard:'실시간 대시보드', sec_dashboard_sub:'근로환경조사 · 산업안전보건실태조사 · 작업환경실태조사 통합 데이터',
+    card1_title:'조사 참여 근로자', card1_meta:'1차~10차 KWCS 누적 응답자',
+    card2_title:'모니터링 사업장', card2_meta:'전국 산업안전 관리 사업장',
+    card3_title:'변수 분석항목', card3_meta:'3개 조사 통합 분석 변수',
+    card4_title:'AI 예측 모델', card4_meta:'운영 중인 위험 예측 AI 모델',
+    chart1_title:'연도별 산업재해 발생 추이 (2006–2024)', chart2_title:'업종별 위험지수',
+    legend1:'재해자수', legend2:'사망자수',
+    tab1:'근로환경조사 (KWCS)', tab2:'산업안전보건실태조사', tab3:'작업환경실태조사',
+    kwcs_rounds:'조사 회차', kwcs_vars:'분석 변수', kwcs_vars_meta:'물리적·심리적·인간공학적 위험', kwcs_base:'근거법령', kwcs_intl:'국제 연계',
+    osh_rounds:'최신 조사', osh_rounds_meta:'산업안전보건 실태조사 최신 데이터', osh_items:'주요 항목', osh_items_val:'안전관리·보건관리·위험성평가', osh_items_meta:'사업장 안전보건 수준 전반',
+    osh_scope:'조사 범위', osh_scope_meta:'5인 이상 사업장 표본조사', osh_org:'주관기관', osh_org_meta:'산업안전보건연구원',
+    work_latest:'최신 조사', work_latest_meta:'작업환경 실태조사', work_focus:'핵심 분야', work_focus_val:'화학·물리·생물학적 위험', work_focus_meta:'작업환경측정 결과 분석',
+    work_sites:'측정 사업장', work_sites_meta:'7차 조사 대상 사업장', work_agents:'유해인자', work_agents_meta:'측정·분석 대상 유해인자',
+    sec_ai:'AI 위험 분석', sec_ai_sub:'머신러닝 기반 실시간 위험 예측 및 패턴 분석',
+    ai1_title:'업종별 위험 예측 순위', ai2_title:'주요 위험 요인 분석', ai3_title:'AI 안전지수 분포 (지역별)',
+    sec_map:'지역별 안전지수 지도', sec_map_sub:'전국 시·도별 AI 안전지수 히트맵 — 클릭하여 상세 확인', map_low:'낮음', map_high:'우수',
+    sec_alerts:'위험 경보 현황', sec_alerts_sub:'AI가 실시간으로 감지한 산업현장 위험 상황',
+    sec_data:'조사 데이터 현황', sec_data_sub:'근로환경조사·산업안전보건·작업환경 통합 데이터베이스',
+    th_survey:'조사명', th_round:'회차', th_year:'연도', th_vars:'변수수', th_industry:'주요 업종', th_risk:'위험도', th_status:'상태',
+    sec_report:'AI 분석 보고서', sec_report_sub:'자동 생성 안전 분석 보고서 및 정책 제언',
+    report1_title:'2024년 산업안전 연간 보고서', report1_desc:'KWCS 1~6차 통합 분석 및 AI 예측 모델 성과 보고',
+    report2_title:'업종별 위험도 평가 보고서', report2_desc:'제조·건설·서비스업 등 12개 업종별 AI 위험 분석',
+    report3_title:'국제 비교 분석 보고서', report3_desc:'EWCS·ILO 데이터 연계 한국 산업안전 국제 비교',
+    report4_title:'AI 모델 성능 보고서', report4_desc:'위험 예측 모델 정확도·재현율·F1 스코어 상세', btn_download:'📥 다운로드',
+    footer_desc:'근로환경조사·산업안전보건실태조사·작업환경실태조사 데이터를 AI로 통합 분석하는 국가 산업안전 플랫폼',
+    footer_data:'데이터', footer_kwcs:'근로환경조사 (KWCS)', footer_osh:'산업안전보건실태조사', footer_work:'작업환경실태조사', footer_intl:'국제 데이터 (ILO·EWCS)',
+    footer_service:'서비스', footer_monitor:'실시간 모니터링', footer_predict:'AI 위험 예측', footer_alert:'위험 경보 시스템', footer_report:'자동 보고서', footer_legal:'법적 근거',
+    footer_powered:'Powered by AI · 실시간 데이터',
+    tick1:'부산 조선업 고소작업 위험 감지 — AI 경보 발령', tick2:'2024년 10차 산업안전보건 실태조사 업데이트 완료', tick3:'경기도 화학공장 안전지수 95.2 → 우수등급 달성',
+    tick4:'AI 모델 정확도 98.4% — 재학습 완료', tick5:'서울·경기 제조업 근골격계 위험도 상승 추세 감지', tick6:'ILO 국제 산업안전 기준 업데이트 반영',
+    logo_main:'AI 산업안전 플랫폼',
+  },
+  en: {
+    nav_dashboard:'Dashboard', nav_analysis:'AI Analysis', nav_map:'Regional Map', nav_alerts:'Risk Alerts', nav_data:'Data', nav_report:'Reports',
+    skip:'Skip to content',
+    disclaimer:'<strong>Demo notice:</strong> Figures shown are illustrative examples based on public statistics (KWCS, OSH Survey, etc.); live values are simulated.',
+    status_live:'Live Monitoring Active', status_sites:'Sites Monitored: <strong style="color:var(--accent)">4,872</strong>',
+    status_workers:'Workers Managed: <strong style="color:var(--accent)">1,243,580</strong>',
+    hero_badge:'Real-time AI Industrial Safety Monitoring System', hero_title2:'Platform',
+    hero_desc:'AI-powered real-time analysis of KWCS, OSH, and Working Environment Survey data to predict and prevent industrial hazards.',
+    btn_dashboard:'View Dashboard', btn_analysis:'AI Analysis',
+    monitor_title:'LIVE SAFETY MONITOR', vs_last:'vs last month', new_alert:'new',
+    kpi1:'National Safety Index', kpi2:'Accidents This Month', kpi3:'AI Accuracy', kpi4:'High-Risk Alerts',
+    chart_label:'Accident trend – last 12 months',
+    sec_dashboard:'Live Dashboard', sec_dashboard_sub:'KWCS · OSH Survey · Working Environment Survey integrated data',
+    card1_title:'Survey Participants', card1_meta:'KWCS Wave 1–10 cumulative respondents',
+    card2_title:'Sites Monitored', card2_meta:'National industrial safety sites',
+    card3_title:'Analysis Variables', card3_meta:'Integrated variables across 3 surveys',
+    card4_title:'AI Prediction Models', card4_meta:'Active risk prediction AI models',
+    chart1_title:'Annual Accident Trend (2006–2024)', chart2_title:'Industry Risk Index',
+    legend1:'Injured Workers', legend2:'Fatalities',
+    tab1:'KWCS Survey', tab2:'OSH Status Survey', tab3:'Working Env. Survey',
+    kwcs_rounds:'Survey Waves', kwcs_vars:'Analysis Variables', kwcs_vars_meta:'Physical, psychological, ergonomic risks', kwcs_base:'Legal Basis', kwcs_intl:'International Link',
+    osh_rounds:'Latest Survey', osh_rounds_meta:'Latest OSH status survey data', osh_items:'Key Topics', osh_items_val:'Safety mgmt · Health mgmt · Risk assessment', osh_items_meta:'Overall workplace safety & health level',
+    osh_scope:'Survey Scope', osh_scope_meta:'Sample survey of workplaces with 5+ workers', osh_org:'Authority', osh_org_meta:'Occupational Safety & Health Research Institute',
+    work_latest:'Latest Wave', work_latest_meta:'Working environment survey', work_focus:'Core Area', work_focus_val:'Chemical · Physical · Biological hazards', work_focus_meta:'Working environment measurement results',
+    work_sites:'Sites Surveyed', work_sites_meta:'Wave 7 target workplaces', work_agents:'Hazardous Agents', work_agents_meta:'Measured & analyzed hazardous agents',
+    sec_ai:'AI Risk Analysis', sec_ai_sub:'ML-based real-time hazard prediction and pattern analysis',
+    ai1_title:'Industry Risk Ranking', ai2_title:'Key Risk Factor Analysis', ai3_title:'AI Safety Index by Region',
+    sec_map:'Regional Safety Index Map', sec_map_sub:'AI safety-index heatmap by province — click for details', map_low:'Low', map_high:'Excellent',
+    sec_alerts:'Risk Alert Status', sec_alerts_sub:'Real-time industrial hazard detection by AI',
+    sec_data:'Survey Data Status', sec_data_sub:'KWCS · OSH · Working Environment integrated database',
+    th_survey:'Survey', th_round:'Wave', th_year:'Year', th_vars:'Variables', th_industry:'Key Industry', th_risk:'Risk Level', th_status:'Status',
+    sec_report:'AI Analysis Reports', sec_report_sub:'Auto-generated safety analysis reports & policy recommendations',
+    report1_title:'2024 Annual Industrial Safety Report', report1_desc:'KWCS Wave 1–6 integrated analysis & AI model performance',
+    report2_title:'Industry Risk Assessment Report', report2_desc:'AI risk analysis across 12 sectors incl. manufacturing, construction',
+    report3_title:'International Comparison Report', report3_desc:'Korea industrial safety vs EWCS & ILO international data',
+    report4_title:'AI Model Performance Report', report4_desc:'Prediction accuracy, recall, F1-score detailed breakdown', btn_download:'📥 Download',
+    footer_desc:'National AI industrial safety platform integrating KWCS, OSH Survey, and Working Environment Survey data',
+    footer_data:'Data', footer_kwcs:'KWCS Survey', footer_osh:'OSH Status Survey', footer_work:'Working Env. Survey', footer_intl:"Int'l Data (ILO·EWCS)",
+    footer_service:'Services', footer_monitor:'Live Monitoring', footer_predict:'AI Risk Prediction', footer_alert:'Alert System', footer_report:'Auto Reports', footer_legal:'Legal Basis',
+    footer_powered:'Powered by AI · Real-time Data',
+    tick1:'Busan Shipyard: High-altitude work risk detected — AI alert issued', tick2:'2024 10th OSH Survey update complete', tick3:'Gyeonggi Chemical Plant safety index 95.2 → Excellent grade achieved',
+    tick4:'AI model accuracy 98.4% — retraining complete', tick5:'Seoul/Gyeonggi manufacturing musculoskeletal risk uptrend detected', tick6:'ILO international safety standard update applied',
+    logo_main:'AI Safety Platform',
+  },
+  cn: {
+    nav_dashboard:'仪表盘', nav_analysis:'AI分析', nav_map:'地区地图', nav_alerts:'风险预警', nav_data:'数据', nav_report:'报告',
+    skip:'跳到主要内容',
+    disclaimer:'<strong>演示说明：</strong>本页面数值为基于公开统计（KWCS、工业安全健康调查等）的示意示例，实时数值为模拟数据。',
+    status_live:'实时监控中', status_sites:'监控工厂: <strong style="color:var(--accent)">4,872</strong>家',
+    status_workers:'管理工人: <strong style="color:var(--accent)">1,243,580</strong>人',
+    hero_badge:'实时AI工业安全监控系统', hero_title2:'平台',
+    hero_desc:'利用AI实时分析劳动环境调查、工业安全健康调查、作业环境调查数据，预测并预防工业现场危险。',
+    btn_dashboard:'查看仪表盘', btn_analysis:'AI分析',
+    monitor_title:'实时安全监控', vs_last:'较上月', new_alert:'新增',
+    kpi1:'全国安全指数', kpi2:'本月事故数', kpi3:'AI预测准确率', kpi4:'高危预警',
+    chart_label:'近12个月事故发生趋势',
+    sec_dashboard:'实时仪表盘', sec_dashboard_sub:'劳动环境调查 · 工业安全健康调查 · 作业环境调查综合数据',
+    card1_title:'调查参与工人数', card1_meta:'第1~10次KWCS累计受访者',
+    card2_title:'监控工厂数', card2_meta:'全国工业安全管理工厂',
+    card3_title:'分析变量数', card3_meta:'3项调查综合分析变量',
+    card4_title:'AI预测模型', card4_meta:'运行中的风险预测AI模型',
+    chart1_title:'年度工业事故趋势（2006–2024）', chart2_title:'行业风险指数',
+    legend1:'受伤工人数', legend2:'死亡人数',
+    tab1:'劳动环境调查（KWCS）', tab2:'工业安全健康调查', tab3:'作业环境调查',
+    kwcs_rounds:'调查轮次', kwcs_vars:'分析变量', kwcs_vars_meta:'物理、心理、人体工学风险', kwcs_base:'法律依据', kwcs_intl:'国际联动',
+    osh_rounds:'最新调查', osh_rounds_meta:'最新工业安全健康调查数据', osh_items:'主要项目', osh_items_val:'安全管理·健康管理·风险评估', osh_items_meta:'工厂安全健康整体水平',
+    osh_scope:'调查范围', osh_scope_meta:'5人以上工厂抽样调查', osh_org:'主管机构', osh_org_meta:'职业安全健康研究院',
+    work_latest:'最新调查', work_latest_meta:'作业环境调查', work_focus:'核心领域', work_focus_val:'化学·物理·生物危害', work_focus_meta:'作业环境测量结果分析',
+    work_sites:'测量工厂', work_sites_meta:'第7次调查目标工厂', work_agents:'有害因子', work_agents_meta:'测量分析对象有害因子',
+    sec_ai:'AI风险分析', sec_ai_sub:'基于机器学习的实时危险预测与模式分析',
+    ai1_title:'行业风险预测排名', ai2_title:'主要风险因素分析', ai3_title:'AI安全指数（按地区）',
+    sec_map:'地区安全指数地图', sec_map_sub:'全国市道AI安全指数热力图 — 点击查看详情', map_low:'低', map_high:'优秀',
+    sec_alerts:'风险预警状况', sec_alerts_sub:'AI实时检测到的工业现场危险情况',
+    sec_data:'调查数据状况', sec_data_sub:'劳动环境·工业安全·作业环境综合数据库',
+    th_survey:'调查名称', th_round:'轮次', th_year:'年份', th_vars:'变量数', th_industry:'主要行业', th_risk:'风险等级', th_status:'状态',
+    sec_report:'AI分析报告', sec_report_sub:'自动生成安全分析报告及政策建议',
+    report1_title:'2024年工业安全年度报告', report1_desc:'KWCS第1~6次综合分析及AI预测模型成果报告',
+    report2_title:'行业风险评估报告', report2_desc:'制造、建筑、服务业等12个行业AI风险分析',
+    report3_title:'国际比较分析报告', report3_desc:'韩国工业安全与EWCS·ILO国际数据比较',
+    report4_title:'AI模型性能报告', report4_desc:'预测准确率、召回率、F1分数详细分析', btn_download:'📥 下载',
+    footer_desc:'整合劳动环境调查、工业安全健康调查、作业环境调查数据的国家AI工业安全平台',
+    footer_data:'数据', footer_kwcs:'劳动环境调查（KWCS）', footer_osh:'工业安全健康调查', footer_work:'作业环境调查', footer_intl:'国际数据（ILO·EWCS）',
+    footer_service:'服务', footer_monitor:'实时监控', footer_predict:'AI风险预测', footer_alert:'预警系统', footer_report:'自动报告', footer_legal:'法律依据',
+    footer_powered:'由AI驱动 · 实时数据',
+    tick1:'釜山造船厂高空作业危险检测 — AI预警发布', tick2:'2024年第10次工业安全健康调查更新完成', tick3:'京畿化工厂安全指数95.2 → 优秀等级达成',
+    tick4:'AI模型准确率98.4% — 重训练完成', tick5:'首尔·京畿制造业骨骼肌肉风险上升趋势检测', tick6:'ILO国际安全标准更新已反映',
+    logo_main:'AI工业安全平台',
+  }
+};
+const LANG_TAG = {kr:'ko', en:'en', cn:'zh-CN'};
+let currentLang = 'kr';
+let cnFontLoaded = false;
+// ── DATA ──
+const industries = {
+  kr:['건설업','광업','제조업','임업','운수업','서비스업','농업'],
+  en:['Construction','Mining','Manufacturing','Forestry','Transport','Services','Agriculture'],
+  cn:['建筑业','采矿业','制造业','林业','运输业','服务业','农业']
+};
+const industryScores = [89,82,76,71,65,58,52];
+const industryColors = ['#ff3860','#ff6b35','#ffbe0b','#ffbe0b','#8aafc8','#39ff14','#39ff14'];
+const riskFactors = {
+  kr:['근골격계 장애 (반복 동작)','유해화학물질 노출','고소작업 추락 위험','소음 노출 (청력 손실)','야간 교대근무 스트레스','열사병·저온 노출','감염성 물질 접촉'],
+  en:['MSDs (Repetitive Motions)','Hazardous Chemical Exposure','Fall from Height Risk','Noise Exposure (Hearing Loss)','Night Shift Stress','Heat/Cold Exposure','Infectious Material Contact'],
+  cn:['骨骼肌肉障碍（重复动作）','有害化学物质暴露','高空作业坠落风险','噪音暴露（听力损失）','夜班压力','高温/低温暴露','感染性物质接触']
+};
+const riskScores = [88,84,79,75,68,62,55];
+const riskScoreColors = ['#ff3860','#ff3860','#ff6b35','#ffbe0b','#ffbe0b','#39ff14','#39ff14'];
+const regions = {
+  kr:['서울','부산','인천','경기','충남','전남','경북'],
+  en:['Seoul','Busan','Incheon','Gyeonggi','Chungnam','Jeonnam','Gyeongbuk'],
+  cn:['首尔','釜山','仁川','京畿','忠南','全南','庆北']
+};
+const regionScores = [91,76,88,83,72,68,79];
+const ringColors = ['#00d4ff','#ff6b35','#39ff14','#ffbe0b','#00d4ff','#ff3860','#39ff14'];
+function scoreColor(s){ return s>=85?'var(--accent3)' : s>=78?'var(--warn)' : s>=70?'var(--accent2)' : 'var(--danger)'; }
+
+const alertsData = {
+  kr:[
+    {type:'critical',icon:'🚨',title:'조선업 고소작업 위험',desc:'부산 조선소 3개소 — 고소작업 추락 위험 AI 감지. 즉각 현장 점검 필요.',time:'3분 전'},
+    {type:'warning',icon:'⚠️',title:'제조업 화학물질 노출 상승',desc:'경기 안산 공단 5개소 — 유기용제 노출 기준치 85% 초과 예측.',time:'12분 전'},
+    {type:'warning',icon:'⚠️',title:'야간 교대 스트레스 지수 상승',desc:'수도권 제조업 야간 근무자 — 근로환경조사 데이터 기반 스트레스 지수 임계.',time:'28분 전'},
+    {type:'info',icon:'📊',title:'10차 산업안전 실태조사 업데이트',desc:'2024년 10차 산업안전보건실태조사 데이터 반영 완료. AI 모델 재학습 진행 중.',time:'1시간 전'},
+    {type:'info',icon:'🤖',title:'AI 모델 정확도 98.4% 달성',desc:'위험 예측 모델 최신 재학습 완료. 전월 대비 0.3%p 향상.',time:'2시간 전'},
+    {type:'safe',icon:'✅',title:'경기 화학공장 안전등급 상향',desc:'화성 화학공장 4개소 — 안전지수 95.2 달성. 우수 등급 인증.',time:'3시간 전'},
+  ],
+  en:[
+    {type:'critical',icon:'🚨',title:'Shipyard High-Altitude Work Risk',desc:'3 Busan shipyards — AI detected fall-from-height risk. Immediate inspection required.',time:'3 min ago'},
+    {type:'warning',icon:'⚠️',title:'Manufacturing Chemical Exposure Rising',desc:'5 Ansan Industrial Complex sites — organic solvent exposure predicted to exceed 85% limit.',time:'12 min ago'},
+    {type:'warning',icon:'⚠️',title:'Night Shift Stress Index Rising',desc:'Seoul metro manufacturing night workers — stress index approaching threshold per KWCS data.',time:'28 min ago'},
+    {type:'info',icon:'📊',title:'10th OSH Survey Data Updated',desc:'2024 10th OSH Status Survey data integration complete. AI model retraining in progress.',time:'1 hour ago'},
+    {type:'info',icon:'🤖',title:'AI Model Accuracy 98.4% Achieved',desc:'Latest risk prediction model retraining complete. +0.3%p vs last month.',time:'2 hours ago'},
+    {type:'safe',icon:'✅',title:'Gyeonggi Chemical Plant Safety Upgraded',desc:'4 Hwaseong chemical plants — safety index 95.2 achieved. Excellent grade certified.',time:'3 hours ago'},
+  ],
+  cn:[
+    {type:'critical',icon:'🚨',title:'造船厂高空作业风险',desc:'釜山3处造船厂 — AI检测到高空坠落风险，需立即现场检查。',time:'3分钟前'},
+    {type:'warning',icon:'⚠️',title:'制造业化学物质暴露上升',desc:'京畿安山工业区5处 — 有机溶剂暴露预测超过基准值85%。',time:'12分钟前'},
+    {type:'warning',icon:'⚠️',title:'夜班压力指数上升',desc:'首都圈制造业夜班工人 — 基于劳动环境调查数据，压力指数接近临界值。',time:'28分钟前'},
+    {type:'info',icon:'📊',title:'第10次工业安全调查数据更新',desc:'2024年第10次工业安全健康调查数据整合完成，AI模型重训练进行中。',time:'1小时前'},
+    {type:'info',icon:'🤖',title:'AI模型准确率达98.4%',desc:'最新风险预测模型重训练完成，较上月提升0.3%p。',time:'2小时前'},
+    {type:'safe',icon:'✅',title:'京畿化工厂安全等级提升',desc:'华城化工厂4处 — 安全指数达95.2，获得优秀等级认证。',time:'3小时前'},
+  ]
+};
+const tableData = [
+  {survey_kr:'근로환경조사',survey_en:'KWCS',survey_cn:'劳动环境调查', round:'6차',year:'2020',vars:'165',industry_kr:'제조·서비스',industry_en:'Mfg·Service',industry_cn:'制造·服务', risk:'low', status_kr:'분석완료',status_en:'Analyzed',status_cn:'分析完成'},
+  {survey_kr:'근로환경조사',survey_en:'KWCS',survey_cn:'劳动环境调查', round:'5차',year:'2017',vars:'158',industry_kr:'제조·건설',industry_en:'Mfg·Construction',industry_cn:'制造·建筑', risk:'mid', status_kr:'분석완료',status_en:'Analyzed',status_cn:'分析完成'},
+  {survey_kr:'근로환경조사',survey_en:'KWCS',survey_cn:'劳动环境调查', round:'4차',year:'2014',vars:'152',industry_kr:'전산업',industry_en:'All Industries',industry_cn:'全行业', risk:'mid', status_kr:'분석완료',status_en:'Analyzed',status_cn:'分析完成'},
+  {survey_kr:'근로환경조사',survey_en:'KWCS',survey_cn:'劳动环境调查', round:'1차',year:'2006',vars:'165',industry_kr:'전산업',industry_en:'All Industries',industry_cn:'全行业', risk:'low', status_kr:'분석완료',status_en:'Analyzed',status_cn:'分析完成'},
+  {survey_kr:'산업안전보건실태조사',survey_en:'OSH Survey',survey_cn:'工业安全健康调查', round:'10차',year:'2024',vars:'289',industry_kr:'제조·건설',industry_en:'Mfg·Construction',industry_cn:'制造·建筑', risk:'high', status_kr:'업데이트됨',status_en:'Updated',status_cn:'已更新'},
+  {survey_kr:'산업안전보건실태조사',survey_en:'OSH Survey',survey_cn:'工业安全健康调查', round:'9차',year:'2022',vars:'274',industry_kr:'제조·광업',industry_en:'Mfg·Mining',industry_cn:'制造·采矿', risk:'mid', status_kr:'분석완료',status_en:'Analyzed',status_cn:'分析完成'},
+  {survey_kr:'작업환경실태조사',survey_en:'Work Env.',survey_cn:'作业环境调查', round:'7차',year:'2023',vars:'189',industry_kr:'화학·제조',industry_en:'Chemical·Mfg',industry_cn:'化工·制造', risk:'high', status_kr:'AI분석중',status_en:'AI Processing',status_cn:'AI分析中'},
+];
+// ── BUILD FUNCTIONS ──
+function buildTicker(){
+  const t=document.getElementById('ticker'); if(!t)return;
+  const items=[1,2,3,4,5,6].map(n=>i18n[currentLang]['tick'+n]);
+  const icons=['⚠️','📊','✅','🤖','📍','🌏'];
+  const one=items.map((tx,i)=>`<span class="ticker-item"><span class="t-icon">${icons[i]}</span> <span>${tx}</span></span>`).join('');
+  t.innerHTML=one+one;
+}
+function buildMiniChart(bars){
+  const c=document.getElementById('miniChart'); if(!c)return;
+  bars=bars||[42,55,49,63,58,72,68,80,75,83,78,90];
+  c.innerHTML=''; const max=Math.max(...bars);
+  bars.forEach((v,i)=>{const b=document.createElement('div');b.className='mini-bar'+(i===bars.length-1?' highlight':'');b.style.height=(v/max*100)+'%';c.appendChild(b);});
+}
+function buildIndustryBars(){
+  const c=document.getElementById('industryBars'); if(!c)return;
+  const names=industries[currentLang]||industries.kr;
+  c.innerHTML=names.map((name,i)=>`
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">
+      <div style="width:80px;font-size:.72rem;color:var(--text2);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+      <div style="flex:1;height:16px;background:var(--surface2);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${industryScores[i]}%;background:${industryColors[i]};border-radius:3px;transition:width 1s ease"></div>
+      </div>
+      <div style="font-family:var(--font-en);font-size:.72rem;color:${industryColors[i]};font-weight:700;width:30px">${industryScores[i]}</div>
+    </div>`).join('');
+}
+function buildIndustryRank(){
+  const c=document.getElementById('industryRank'); if(!c)return;
+  const names=industries[currentLang]||industries.kr;
+  c.innerHTML=names.map((name,i)=>`
+    <div class="ai-list-item"><span style="font-family:var(--font-en);font-size:.7rem;color:${industryColors[i]};font-weight:700;min-width:22px">#${i+1}</span>${name}<span class="ai-score" style="color:${industryColors[i]}">${industryScores[i]}</span></div>`).join('');
+}
+function buildRiskFactors(){
+  const c=document.getElementById('riskFactors'); if(!c)return;
+  const f=riskFactors[currentLang]||riskFactors.kr;
+  c.innerHTML=f.map((x,i)=>`<div class="ai-list-item">${x}<span class="ai-score" style="color:${riskScoreColors[i]}">${riskScores[i]}%</span></div>`).join('');
+}
+function buildAlerts(){
+  const c=document.getElementById('alertGrid'); if(!c)return;
+  const data=alertsData[currentLang]||alertsData.kr;
+  c.innerHTML=data.map(a=>`
+    <div class="alert-card ${a.type}"><div class="alert-icon" aria-hidden="true">${a.icon}</div>
+      <div class="alert-body"><div class="alert-title">${a.title}</div><div class="alert-desc">${a.desc}</div><div class="alert-time">${a.time}</div></div></div>`).join('');
+  const cnt=document.getElementById('alert-count');
+  const labels={kr:'총 '+data.length+'개 경보',en:data.length+' alerts total',cn:'共'+data.length+'条预警'};
+  if(cnt) cnt.textContent=labels[currentLang]||labels.kr;
+}
+function buildTable(){
+  const body=document.getElementById('tableBody'); if(!body)return;
+  const riskLabel={kr:{high:'고위험',mid:'중위험',low:'낮음'},en:{high:'High',mid:'Medium',low:'Low'},cn:{high:'高危',mid:'中危',low:'低'}};
+  const lang=currentLang;
+  body.innerHTML=tableData.map(r=>{
+    const survey=r['survey_'+lang]||r.survey_kr, industry=r['industry_'+lang]||r.industry_kr, status=r['status_'+lang]||r.status_kr;
+    const rl=riskLabel[lang]||riskLabel.kr;
+    const rc=r.risk==='high'?'severity-high':r.risk==='mid'?'severity-mid':'severity-low';
+    return `<tr><td>${survey}</td><td>${r.round}</td><td>${r.year}</td><td>${r.vars}</td><td>${industry}</td><td><span class="severity-badge ${rc}">${rl[r.risk]}</span></td><td style="color:var(--text2)">${status}</td></tr>`;
+  }).join('');
+  const info=document.getElementById('table-info');
+  const il={kr:`전체 ${tableData.length}건`,en:`${tableData.length} records`,cn:`共${tableData.length}条`};
+  if(info) info.textContent=il[lang]||il.kr;
+}
+function filterTable(){
+  const q=document.getElementById('tableSearch').value.toLowerCase();
+  document.querySelectorAll('#tableBody tr').forEach(tr=>{tr.style.display=tr.textContent.toLowerCase().includes(q)?'':'none';});
+}
+function buildRegionRings(){
+  const c=document.getElementById('regionRings'); if(!c)return;
+  const names=regions[currentLang]||regions.kr;
+  const r=28, circ=2*Math.PI*r;
+  c.innerHTML=names.map((name,i)=>{
+    const dash=circ*(regionScores[i]/100);
+    return `<div class="ring-wrap"><svg width="80" height="80" class="ring-svg" role="img" aria-label="${name} ${regionScores[i]}">
+      <circle class="ring-track" cx="40" cy="40" r="${r}"/>
+      <circle class="ring-fill" cx="40" cy="40" r="${r}" stroke="${ringColors[i]}" stroke-dasharray="${dash} ${circ}" stroke-dashoffset="0"/>
+      <text x="40" y="44" text-anchor="middle" font-size="13" font-weight="700" fill="${ringColors[i]}" font-family="Rajdhani" transform="rotate(90,40,40)">${regionScores[i]}</text>
+    </svg><div style="font-size:.72rem;color:var(--text2)">${name}</div></div>`;
+  }).join('');
+}
+// ── KOREA MAP ──
+let selectedRegion=null;
+function buildRegionList(){
+  const c=document.getElementById('regionList'); if(!c)return;
+  const names=regions[currentLang]||regions.kr;
+  c.innerHTML=names.map((name,i)=>`
+    <div class="region-item" data-region="${i}" onclick="selectRegion(${i})" tabindex="0" onkeydown="if(event.key==='Enter')selectRegion(${i})">
+      <span class="region-name">${name}</span>
+      <span class="region-bar-wrap"><span class="region-bar" style="width:${regionScores[i]}%;background:${scoreColor(regionScores[i])}"></span></span>
+      <span class="region-val" style="color:${scoreColor(regionScores[i])}">${regionScores[i]}</span>
+    </div>`).join('');
+}
+function paintMap(){
+  document.querySelectorAll('#koreaMap .kr-region').forEach(p=>{
+    const i=+p.dataset.region;
+    p.setAttribute('fill', scoreColor(regionScores[i]));
+    const names=regions[currentLang]||regions.kr;
+    p.setAttribute('aria-label', names[i]+' '+regionScores[i]);
+    p.onclick=()=>selectRegion(i);
+    p.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRegion(i);} };
+  });
+}
+function selectRegion(i){
+  selectedRegion=i;
+  document.querySelectorAll('#koreaMap .kr-region').forEach(p=>p.classList.toggle('sel',+p.dataset.region===i));
+  document.querySelectorAll('#regionList .region-item').forEach(el=>el.classList.toggle('sel',+el.dataset.region===i));
+  const el=document.querySelector(`#regionList .region-item[data-region="${i}"]`);
+  if(el) el.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+// ── LANGUAGE ──
+function ensureCnFont(){
+  if(cnFontLoaded) return;
+  const l=document.createElement('link');
+  l.rel='stylesheet';
+  l.href='https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap';
+  document.head.appendChild(l);
+  cnFontLoaded=true;
+}
+function setLang(lang){
+  currentLang=lang;
+  const themeLight=document.body.classList.contains('theme-light');
+  document.body.className='lang-'+lang+(themeLight?' theme-light':'');
+  document.documentElement.lang=LANG_TAG[lang]||'ko';   // 修复：同步 <html lang>
+  if(lang==='cn') ensureCnFont();
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.dataset.i18n;
+    if(i18n[lang][k]!==undefined) el.innerHTML=i18n[lang][k];
+  });
+  const logoEl=document.getElementById('logo-text');
+  if(logoEl) logoEl.textContent=i18n[lang].logo_main||i18n.kr.logo_main;
+  buildTicker(); buildIndustryRank(); buildRiskFactors(); buildAlerts();
+  buildTable(); buildRegionRings(); buildRegionList(); paintMap();
+  if(selectedRegion!==null) selectRegion(selectedRegion);
+  // count-up 重新播放（修复：切语言后数字归零问题）
+  document.querySelectorAll('.count-up').forEach(el=>countUp(el));
+  updateTime();
+}
+// ── THEME ──
+function applyThemeMeta(){
+  const m=document.getElementById('themeColorMeta');
+  const light=document.body.classList.contains('theme-light');
+  if(m) m.setAttribute('content', light?'#eef4fb':'#060e1f');
+  const btn=document.getElementById('themeBtn');
+  if(btn) btn.textContent= light?'☀️':'🌙';
+}
+function toggleTheme(){
+  document.body.classList.toggle('theme-light');
+  applyThemeMeta();
+}
+// ── LIVE UPDATES ──
+function updateKPIs(){
+  const fmt=n=>n.toLocaleString(LANG_TAG[currentLang]||'ko');
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  set('kpi-safety',(87+Math.random()*1.5).toFixed(1));
+  set('kpi-accident',fmt(Math.floor(1230+Math.random()*50)));
+  set('kpi-alert',Math.floor(20+Math.random()*8));
+  // mini-chart 真实微波动（修复：原 8 秒空重建）
+  buildMiniChart([42,55,49,63,58,72,68,80,75,83,78,90].map(v=>Math.max(10,Math.round(v+(Math.random()*8-4)))));
+}
+function updateTime(){
+  const now=new Date(), pad=n=>String(n).padStart(2,'0');
+  const s=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const t=document.getElementById('status-time'); if(t)t.textContent=s;
+  const lu=document.getElementById('last-update');
+  const lbl={kr:'마지막 업데이트: ',en:'Last update: ',cn:'最后更新: '};
+  if(lu) lu.textContent=(lbl[currentLang]||lbl.kr)+s;
+}
+function countUp(el){
+  const target=parseInt(el.dataset.target);
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){ el.textContent=target.toLocaleString(); return; }
+  const dur=1600, start=performance.now();
+  function step(now){
+    const p=Math.min((now-start)/dur,1), eased=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(eased*target).toLocaleString();
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+// ── TABS (修复：传 this，不依赖全局 event) ──
+function switchTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const panel=document.getElementById('tab-'+id);
+  if(panel) panel.classList.add('active');
+  if(btn) btn.classList.add('active');
+}
+// ── MOBILE MENU (修复：锁滚动 + 外部点击关闭 + aria) ──
+function toggleMenu(){
+  const m=document.getElementById('mobileMenu'), btn=document.getElementById('menuBtn');
+  const open=m.classList.toggle('open');
+  document.body.classList.toggle('menu-open',open);
+  if(btn) btn.setAttribute('aria-expanded',open?'true':'false');
+}
+// ── TIMERS (修复：页面隐藏时暂停) ──
+let timers=[];
+function startTimers(){
+  stopTimers();
+  timers.push(setInterval(updateTime,1000));
+  timers.push(setInterval(updateKPIs,5000));
+}
+function stopTimers(){ timers.forEach(clearInterval); timers=[]; }
+document.addEventListener('visibilitychange',()=>{ document.hidden?stopTimers():startTimers(); });
+// ── INTERSECTION OBSERVER ──
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.querySelectorAll('.count-up').forEach(el=>countUp(el)); io.unobserve(e.target); } });
+},{threshold:0.3});
+// ── INIT ──
+document.addEventListener('DOMContentLoaded',()=>{
+  buildMiniChart(); buildIndustryBars();
+  setLang('kr');
+  applyThemeMeta();
+  document.querySelectorAll('.dashboard-grid').forEach(el=>io.observe(el));
+  updateTime(); startTimers();
+  // active nav on scroll
+  const sections=document.querySelectorAll('section[id]');
+  let ticking=false;
+  window.addEventListener('scroll',()=>{
+    if(ticking) return; ticking=true;
+    requestAnimationFrame(()=>{
+      let cur='';
+      sections.forEach(s=>{ if(window.scrollY>=s.offsetTop-100) cur=s.id; });
+      document.querySelectorAll('.nav-link').forEach(a=>{
+        const on=a.getAttribute('href')==='#'+cur;
+        a.classList.toggle('active',on);
+        if(on) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
+      });
+      ticking=false;
+    });
+  });
+  // 外部点击关闭移动菜单
+  document.getElementById('mobileMenu').addEventListener('click',e=>{ if(e.target.id==='mobileMenu') toggleMenu(); });
+});
+</script>
 </body>
 </html>
